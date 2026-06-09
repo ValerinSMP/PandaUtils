@@ -1,0 +1,36 @@
+<project xmlns="https://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="https://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>PandaUtils</groupId>
+		<artifactId>PandaUtils</artifactId>
+		<version>0.0.1 Alpha</version>
+	</parent>
+	<artifactId>PandaPlugin</artifactId>
+	<name>PandaPlugin</name>
+	<properties>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.34</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>PandaUtils</groupId>
+			<artifactId>PandaColors</artifactId>
+			<version>0.0.1 Alpha</version>
+           <scope>provided</scope>
+		</dependency>
+		<dependency>
+		    <groupId>PandaUtils</groupId>
+		    <artifactId>ReflectionsFork</artifactId>
+		    <version>0.0.1 Alpha</version>
+		</dependency>
+	</dependencies>
+</project>
