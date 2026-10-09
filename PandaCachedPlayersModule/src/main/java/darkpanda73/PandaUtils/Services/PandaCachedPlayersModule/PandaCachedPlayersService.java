@@ -4,8 +4,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -53,7 +53,7 @@ public class PandaCachedPlayersService {
 	@PandaInject
 	private PandaSQLService sqlService;
 
-	private HashMap<UUID, PandaCachedPlayer> cachedPlayers = new HashMap<>();
+	private ConcurrentHashMap<UUID, PandaCachedPlayer> cachedPlayers = new ConcurrentHashMap<>();
 	private SleepingLoop clearLoop;
 	private @Getter AsyncQueue<Runnable> asyncQueue;
 

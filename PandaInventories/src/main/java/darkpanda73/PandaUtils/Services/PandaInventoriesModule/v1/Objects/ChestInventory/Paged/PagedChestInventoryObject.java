@@ -13,6 +13,7 @@ import darkpanda73.PandaUtils.Services.PandaInventoriesModule.v1.Objects.ChestIn
 import darkpanda73.PandaUtils.Services.PandaInventoriesModule.v1.Objects.ChestInventory.GeneratedItem;
 import darkpanda73.PandaUtils.Services.PandaInventoriesModule.v1.Objects.ChestInventory.Item;
 import darkpanda73.PandaUtils.Utilities.Java.Methods.MethodFinder;
+import darkpanda73.PandaUtils.PandaColors.Messages.Objects.Replacement;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,11 +26,21 @@ public abstract class PagedChestInventoryObject<E> extends ChestInventoryObject 
 	private @Getter @Setter boolean updateListOnUpdateInventory = false;
 
 	private List<? extends E> entityList;
-	private @Getter @Setter int currentPage;
-	private @Getter int currentMaxPage;
+	private @Getter @Setter int currentPage = 1;
+	private @Getter int currentMaxPage = 1;
 
 	public PagedChestInventoryObject(Player player) {
 		super(player);
+		setTitleReplacements();
+	}
+
+	@Override
+	public void setTitleReplacements(Replacement... replacements) {
+		Replacement[] withPages = new Replacement[replacements.length + 2];
+		System.arraycopy(replacements, 0, withPages, 0, replacements.length);
+		withPages[replacements.length] = new Replacement("{current_page}", () -> Integer.toString(currentPage));
+		withPages[replacements.length + 1] = new Replacement("{max_page}", () -> Integer.toString(currentMaxPage));
+		super.setTitleReplacements(withPages);
 	}
 
 	@Override

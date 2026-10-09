@@ -62,7 +62,7 @@ public class PandaMessageListenerService {
 			}
 
 			listener.onPlayerChatEvent((AsyncPlayerChatEvent) e);
-		}, plugin, true);
+		}, plugin, false);
 	}
 
 }

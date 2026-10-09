@@ -1,7 +1,7 @@
 package darkpanda73.PandaUtils.Services.PandaMessageListenerModule.Listeners;
 
-import java.util.HashMap;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -11,6 +11,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import darkpanda73.PandaUtils.Services.PandaFilesModule.Annotation.RegisteredPandaField;
 import darkpanda73.PandaUtils.Services.PandaFilesModule.Objects.Fields.PandaStringField;
 import darkpanda73.PandaUtils.Services.PandaMessageListenerModule.Exceptions.PlayerAlreadyListeningException;
+import darkpanda73.PandaUtils.PandaPlugin.Utils.TasksUtils;
 
 public class PandaMessageListener implements Listener {
 
@@ -18,7 +19,7 @@ public class PandaMessageListener implements Listener {
 	private static final PandaStringField SETTINGS_MESSAGELISTENER_LISTENERPRIORITY = new PandaStringField(
 			"Settings.Message-listener.Cancel-phrase", "cancel");
 
-	private HashMap<UUID, Callback> listeningTo = new HashMap<>();
+	private ConcurrentHashMap<UUID, Callback> listeningTo = new ConcurrentHashMap<>();
 
 	public void startListening(UUID playerUuid, Callback callback) throws PlayerAlreadyListeningException {
 		if (listeningTo.containsKey(playerUuid)) {
@@ -48,17 +49,20 @@ public class PandaMessageListener implements Listener {
 		if (callback != null) {
 			e.setCancelled(true);
 
-			if (SETTINGS_MESSAGELISTENER_LISTENERPRIORITY.hasContent() && SETTINGS_MESSAGELISTENER_LISTENERPRIORITY
-					.getContent().toLowerCase().equals(e.getMessage().toLowerCase())) {
-				listeningTo.remove(e.getPlayer().getUniqueId());
-				callback.cancel();
-				return;
-			}
+			UUID playerUuid = e.getPlayer().getUniqueId();
+			String message = e.getMessage();
+			TasksUtils.execute(() -> {
+				if (listeningTo.get(playerUuid) != callback) {
+					return;
+				}
 
-			if (callback.message(e.getMessage())) {
-				listeningTo.remove(e.getPlayer().getUniqueId());
-				callback.cancel();
-			}
+				boolean cancelled = SETTINGS_MESSAGELISTENER_LISTENERPRIORITY.hasContent()
+						&& SETTINGS_MESSAGELISTENER_LISTENERPRIORITY.getContent().equalsIgnoreCase(message);
+				if (cancelled || callback.message(message)) {
+					listeningTo.remove(playerUuid, callback);
+					callback.cancel();
+				}
+			});
 		}
 	}
 
