@@ -26,7 +26,9 @@ public class MessageTemplate {
 					int majorVersion = Integer.parseInt(versionInfo[0]);
 					int minorVersion = Integer.parseInt(versionInfo[1]);
 
-					if (majorVersion == 1) {
+					if (majorVersion >= 26) {
+						builder = new darkpanda73.PandaUtils.PandaColors.Messages.NMS.Modern.ModernMessageBuilder();
+					} else if (majorVersion == 1) {
 						if (minorVersion >= 11) {
 							builder = new darkpanda73.PandaUtils.PandaColors.Messages.NMS.v1_11_R1.NMSMessageBuilder();
 						} else if (minorVersion >= 9) {

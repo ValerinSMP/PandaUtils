@@ -35,6 +35,16 @@ public abstract class PagedChestInventoryObject<E> extends ChestInventoryObject 
 	}
 
 	@Override
+	protected String getUnformattedTitle() {
+		return formatPageTitle(super.getUnformattedTitle(), currentMaxPage);
+	}
+
+	public static String formatPageTitle(String title, int maxPages) {
+		// Strip only the configured counter, before player names are substituted.
+		return maxPages <= 1 ? title.replace(" ({current_page}/{max_page})", "") : title;
+	}
+
+	@Override
 	public void setTitleReplacements(Replacement... replacements) {
 		Replacement[] withPages = new Replacement[replacements.length + 2];
 		System.arraycopy(replacements, 0, withPages, 0, replacements.length);
